@@ -46,6 +46,22 @@ create table documents (
 grant select on groups, users, memberships to authenticated;
 grant select, insert on documents to authenticated;
 
+-- Supabase enforces RLS project-wide, so we must explicitly enable it and add
+-- permissive read policies for the reference tables that were intended to be
+-- visible to all signed-in users.
+alter table groups enable row level security;
+alter table users enable row level security;
+alter table memberships enable row level security;
+
+create policy "groups are visible to signed-in users"
+  on groups for select to authenticated using (true);
+
+create policy "users are visible to signed-in users"
+  on users for select to authenticated using (true);
+
+create policy "memberships are visible to signed-in users"
+  on memberships for select to authenticated using (true);
+
 -- ---------------------------------------------------------------------------
 -- Row-Level Security
 -- ---------------------------------------------------------------------------
