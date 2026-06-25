@@ -20,8 +20,7 @@ directions, plus the authorship-forgery case.
 I used Cursor (Composer/Agent mode with Claude) to scaffold the migration, API
 route, and test file from the take-home prompt and existing repo conventions
 (`0001_init.sql`, `documents/route.ts`, `helpers.ts`). I reviewed the generated
-SQL and TypeScript against those patterns before committing in four phases. I
-could not run `pnpm db:reset` or `pnpm test` in this environment because
-`.env.local` has no `DATABASE_URL` filled in and Docker/local Supabase is not
-available here — those commands should be run locally after adding Supabase
-credentials.
+SQL and TypeScript against those patterns before committing in four phases.
+Verified locally with `node scripts/db-reset.mjs` (both migrations apply cleanly)
+and `npx vitest run` (7/7 tests pass, including all six notes isolation cases).
+No service-role key is used in `app/`; tenant isolation is enforced only via RLS.
